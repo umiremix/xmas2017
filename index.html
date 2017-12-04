@@ -37,17 +37,49 @@ renderer.setClearColor(0xe6dac5, 1); // 背景色
 camera.position.z = 200; // カメラの距離
 // console.log(renderer);
 
+// 支え部分
 var baMaterial = new THREE.MeshBasicMaterial({color: 0xd6c4a6});
 var cyGeometry = new THREE.CylinderGeometry(50, 50, 25, 100); // 円柱
 var cylinder = new THREE.Mesh(cyGeometry, baMaterial); // 円柱セット
 
-var phMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
-var spGeometry = new THREE.SphereGeometry(60, 60, 30); // 球
-var sphere  = new THREE.Mesh(spGeometry, phMaterial); // 球セット
-// phMaterial.color = 0xffffff;
-sphere.position.y += 50;
+scene.add(cylinder);
 
-scene.add(cylinder, sphere);
+// ガラス
+var customMaterial = new THREE.MeshBasicMaterial({
+  color: 0xffffff,
+  opacity: 0.1,
+  transparent: true,
+  blending: 2
+});
+var spGeometry = new THREE.SphereGeometry(60, 60, 30); // 球
+var glow = new THREE.Mesh(spGeometry, customMaterial);
+glow.position.x = 0;
+glow.position.y = 50;
+glow.position.z = 0;
+glow.scale.multiplyScalar(1.02);
+scene.add(glow);
+
+console.log(customMaterial)
+
+// クリッピング
+// var plane = [
+// new THREE.Plane(new THREE.Vector3(0, 6.2, 0), -2),
+// new THREE.Plane(new THREE.Vector3(0, -1, 0), 0),
+// new THREE.Plane(new THREE.Vector3(0, 0, -1), 0)
+// ];
+// renderer.clippingPlanes.push(plane[0]);
+// renderer.clippingPlanes.push(plane[1]);
+// renderer.clippingPlanes.push(plane[2]);
+
+// 雪
+for ( var i = 0; i < 100; i ++ ) {
+  var snowGeometry = new THREE.SphereGeometry(6, 6, 3); // 球
+  var object = new THREE.Mesh( snowGeometry, new THREE.MeshBasicMaterial( { color: 0xffffff } ) );
+  object.position.x = Math.random() * 800 - 400;
+  object.position.y = Math.random() * 800 - 400;
+  object.position.z = Math.random() * 800 - 400;
+  scene.add(object);
+}
 
 // ▼▼▼ アニメーション ▼▼▼
 function animate() {
