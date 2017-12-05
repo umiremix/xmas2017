@@ -12,6 +12,7 @@
     width: 100%;
     height: 100%;
     background: #e6dac5;
+    background-image: radial-gradient(#f6ead5, #e6dac5);
   }
 </style>
 </head>
@@ -22,7 +23,86 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.1/pixi.min.js"></script>
 
 <script>
+const w = window.innerWidth
+const h = window.innerHeight
+const base = {x: w / 2, y: h / 2}
+const app = new PIXI.Application(w, h, { antialias: true, transparent: true, autoResize: true})
+document.getElementById('xmas2017').appendChild(app.view)
 
+const graphics = new PIXI.Graphics()
+
+graphics.lineStyle(5, 0xffffff, 1)
+graphics.beginFill(0xe6dac5, 0)
+graphics.drawCircle(base.x, base.y,(414 / 2))
+graphics.endFill()
+
+graphics.lineStyle(0)
+graphics.beginFill(0xd6c4a6, 1)
+graphics.drawRect(base.x - (306 / 2), base.y + ((426) / 2) - 80 + 12, 306, 80)
+
+const container = new PIXI.Container()
+
+let snow = []
+let add = []
+const snowW = 414
+const snowH = 414
+for(let i = 0; i < 40; i++) {
+  const x = Math.floor(Math.random() * snowW)
+  const y = Math.floor(Math.random() * snowH)
+  add.push(i % 2 ? -1 : 1)
+  snow.push(new PIXI.Graphics().beginFill(0xffffff, 1).drawCircle(0, 0, (i % 5 + 8)))
+  snow[i].position.x = base.x + x - (snowW / 2)
+  snow[i].position.y = base.y + y - (snowH / 2)
+  snow[i].alpha = (i % 5 + 5) * 0.1
+  container.addChild(snow[i])
+  console.log(snow[i])
+}
+
+const content = PIXI.Sprite.fromImage('content.png')
+content.x = base.x - (362 / 2)
+content.y = base.y - (390 / 2) + 107 - 10
+
+container.addChild(content)
+
+app.stage.addChild(container)
+
+const thing = new PIXI.Graphics()
+app.stage.addChild(thing)
+
+thing.lineStyle(5, 0xffffff, 1)
+thing.beginFill(0xe6dac5, 0)
+thing.drawCircle(base.x, base.y,(414 / 2))
+thing.endFill()
+
+container.mask = thing
+
+app.stage.addChild(graphics)
+
+const plus = [0.2, 0.25, 0.3, 0.35, 0.4]
+
+animate()
+function animate() {
+  requestAnimationFrame(animate)
+  for (var i = 0; i < 40; i++) {
+    let x
+    snow[i].clear()
+    if (snow[i].x > base.x + (snowW / 2)) {
+      add[i] = -1
+    } else if (snow[i].x < base.x - (snowW / 2)) {
+      add[i] = 1
+    }
+    if (snow[i].y > base.y + (snowH / 2)) {
+      snow[i].y = base.y - (snowH / 2) - 10
+    }
+    x = (add[i] === -1) ? (snow[i].x - plus[i % 5]) : (snow[i].x + plus[i % 5])
+    y = snow[i].y + plus[i % 5]
+    snow[i].position.x = x
+    snow[i].position.y = y
+    snow[i].beginFill(0xffffff, 1).drawCircle(0, 0, (i % 5 + 8))
+    // console.log(snow[i])
+  }
+  
+}
 </script>
 </body>
 </html>
