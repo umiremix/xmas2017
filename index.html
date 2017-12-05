@@ -55,7 +55,6 @@ for(let i = 0; i < 60; i++) {
   snow[i].position.y = base.y + y - (snowH / 2)
   snow[i].alpha = (i % 5 + 5) * 0.1
   container.addChild(snow[i])
-  console.log(snow[i])
 }
 
 const content = PIXI.Sprite.fromImage('content.png')
@@ -99,7 +98,6 @@ function animate() {
     snow[i].position.x = x
     snow[i].position.y = y
     snow[i].beginFill(0xffffff, 1).drawCircle(0, 0, (i % 5 + 8))
-    // console.log(snow[i])
   }
   
 }
